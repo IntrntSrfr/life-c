@@ -16,12 +16,12 @@ I haven't added gif exporting yet
 
 1. Initialize submodules:
 
-```bash
+```console
 git submodule update --init --recursive
 ```
 
 2. Build and run
 
-```bash
+```console
 make build run
 ```

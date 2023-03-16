@@ -11,69 +11,67 @@ Grid *new_grid(int height, int width, bool wrap) {
   grid->height = height;
   grid->width = width;
   grid->wrap = wrap;
-  grid->data = calloc(height * width, sizeof(bool));;
+  grid->data = calloc(height * width, sizeof(bool));
+  ;
   return grid;
 }
 
-void destroy_grid(Grid *grid){
+void destroy_grid(Grid *grid) {
   free(grid->data);
   free(grid);
 }
 
 void randomize_grid(Grid *grid, float p) {
-  if(!grid) return;
+  if (!grid) return;
   srand(time(0));
-  for(size_t y = 0; y < grid->height; y++)
-    for(size_t x = 0; x < grid->width; x++)
-      grid->data[y*grid->width+x] = (rand()%2) == 0;
+  for (size_t y = 0; y < grid->height; y++)
+    for (size_t x = 0; x < grid->width; x++)
+      grid->data[y * grid->width + x] = (rand() % 2) == 0;
 }
 
 void step_grid(const Grid *grid, Grid *dst) {
   copy_grid(grid, dst);
-  for (int y = 0; y < grid->height; y++){
-    for (int x = 0; x < grid->width; x++){
-      int n = grid_pos_neighbours(grid,  x, y);
-      bool at = at_grid_pos(grid, x,  y);
-      if (at == 1 && (n!=2 && n!=3))
-        set_grid_pos(dst,  x,  y, false);
-      if (at == 0 && n==3)
-        set_grid_pos(dst,  x,  y, true);
+  for (int y = 0; y < grid->height; y++) {
+    for (int x = 0; x < grid->width; x++) {
+      int n = grid_pos_neighbours(grid, x, y);
+      bool at = at_grid_pos(grid, x, y);
+      if (at == 1 && (n != 2 && n != 3))
+        set_grid_pos(dst, x, y, false);
+      if (at == 0 && n == 3)
+        set_grid_pos(dst, x, y, true);
     }
   }
 }
 
-int mod(int a, int b){
+int mod(int a, int b) {
   int r = a % b;
   return r < 0 ? r + b : r;
 }
 
 void get_wrapped_grid_pos(const Grid *grid, int *x, int *y) {
-  if(!(grid&&x&&y)) return;
-  //printf("old x, y: %d %d\n", *x, *y);
+  if (!(grid && x && y)) return;
   *x = mod(*x, grid->width);
   *y = mod(*y, grid->height);
-  //printf("new x, y: %d %d\n", *x, *y);
 }
 
 bool at_grid_pos(const Grid *grid, int x, int y) {
-  if(!grid) return false;
-  //printf("x: %d, y: %d\n", x, y);
+  if (!grid) return false;
   get_wrapped_grid_pos(grid, &x, &y);
-  return grid->data[y*grid->width+x];
+  return grid->data[y * grid->width + x];
 }
 
 void set_grid_pos(Grid *grid, int x, int y, bool value) {
-  if(!grid) return;
+  if (!grid) return;
   get_wrapped_grid_pos(grid, &x, &y);
-  grid->data[y*grid->width+x] = value;
+  grid->data[y * grid->width + x] = value;
 }
 
 int grid_pos_neighbours(const Grid *grid, int x, int y) {
   int count = 0;
-  for(int dy = -1; dy < 2; dy++){
-    for(int dx = -1; dx < 2; dx++){
-      if(dy == 0 && dx == 0) continue;
-      if (at_grid_pos(grid, x+dx,y+dy))
+  for (int dy = -1; dy < 2; dy++) {
+    for (int dx = -1; dx < 2; dx++) {
+      if (dy == 0 && dx == 0) continue;
+      if (at_grid_pos(grid, x + dx, y + dy))
         count++;
     }
   }
@@ -101,8 +99,8 @@ void print_grid(const Grid *grid) {
 }
 
 void copy_grid(const Grid *src, Grid *dst) {
-  dst->width=src->width;
-  dst->height=src->height;
-  dst->wrap=src->wrap;
-  memcpy(dst->data, src->data, sizeof (bool) * dst->height*dst->width);
+  dst->width = src->width;
+  dst->height = src->height;
+  dst->wrap = src->wrap;
+  memcpy(dst->data, src->data, sizeof(bool) * dst->height * dst->width);
 }

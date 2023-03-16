@@ -21,5 +21,4 @@ void set_grid_pos(Grid *grid, int x, int y, bool value);
 int grid_pos_neighbours(const Grid *grid, int x, int y);
 void print_grid(const Grid *grid);
 
-
 #endif

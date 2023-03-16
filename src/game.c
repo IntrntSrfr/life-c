@@ -35,7 +35,8 @@ void run_game(Game* game, int iterations, bool display, int delay) {
     if (display)
       print_grid(game->grid);
     step_game(game);
-    sleep(delay);
+    if(display)
+      sleep(delay);
   }
 }
 

@@ -1,6 +1,3 @@
-#include <stdlib.h>
-#include <stdio.h>
-
 #include "game.h"
 
 int main() {
@@ -10,7 +7,7 @@ int main() {
   // set_grid_pos(game->grid, 13, 11, true);
   // set_grid_pos(game->grid, 13, 12, true);
   // set_grid_pos(game->grid, 14, 12, true);
-  run_game(game, 2, true, 250);
+  run_game(game, 5, true, 250);
   export_game(game, 150, 150);
   destroy_game(game);
 }

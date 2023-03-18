@@ -80,18 +80,20 @@ int grid_pos_neighbours(const Grid *grid, int x, int y) {
 
 void print_grid(const Grid *grid) {
   if (!grid) return;
-  char *out_str = malloc((2 * grid->height * grid->width + grid->height) * sizeof(char));
+  int len = (2 * grid->height * grid->width + grid->height);
+  char *out_str = malloc(len * sizeof(char) + 1);
   if (!out_str) return;
   int offset = 0;
   for (size_t y = 0; y < grid->height; y++) {
     for (size_t x = 0; x < grid->width; x++) {
       const char *tmp = grid->data[y * grid->width + x] ? "# " : ". ";
       int cur = (int)(y * grid->width + x) * 2;
-      strcpy(out_str + cur + offset, tmp);
+      strcpy_s(out_str + cur + offset, 3, tmp);
     }
     out_str[(1 + y) * grid->width * 2 + offset] = '\n';
     offset += 1;
   }
+  out_str[len] = '\0';
   printf("%s\n", out_str);
   free(out_str);
 }

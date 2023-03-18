@@ -82,7 +82,6 @@ void print_grid(const Grid *grid) {
   if (!grid) return;
   char *out_str = malloc((2 * grid->height * grid->width + grid->height) * sizeof(char));
   if (!out_str) return;
-
   int offset = 0;
   for (size_t y = 0; y < grid->height; y++) {
     for (size_t x = 0; x < grid->width; x++) {
@@ -93,7 +92,6 @@ void print_grid(const Grid *grid) {
     out_str[(1 + y) * grid->width * 2 + offset] = '\n';
     offset += 1;
   }
-
   printf("%s\n", out_str);
   free(out_str);
 }

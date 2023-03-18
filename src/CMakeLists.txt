@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.22)
-project(life-c)
+project(life-c C)
 
 set(CMAKE_C_STANDARD 17 -Wall -Wextra -pg)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0")

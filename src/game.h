@@ -2,11 +2,12 @@
 #define GAME_
 
 #include "grid.h"
+#include <stdbool.h>
 
 typedef struct {
   Grid *grid;
   Grid *buf_grid;
-  Grid *history;
+  bool **history;
   int height;
   int width;
 } Game;
@@ -16,5 +17,6 @@ void destroy_game(Game *game);
 void randomize_game(Game *game, float p);
 void run_game(Game *game, int iterations, bool display, int delay);
 void step_game(Game *game);
+void export_game(Game *game, int height, int width);
 
 #endif

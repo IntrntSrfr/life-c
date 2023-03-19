@@ -22,6 +22,7 @@ void destroy_grid(Grid *grid) {
 
 void randomize_grid(Grid *grid, float p) {
   if (!grid) return;
+  (void) p;
   srand(time(0));
   for (size_t y = 0; y < grid->height; y++)
     for (size_t x = 0; x < grid->width; x++)
@@ -55,13 +56,15 @@ void get_wrapped_grid_pos(const Grid *grid, int *x, int *y) {
 
 bool at_grid_pos(const Grid *grid, int x, int y) {
   if (!grid) return false;
-  get_wrapped_grid_pos(grid, &x, &y);
+  if(x < 0 || y < 0 || x >= grid->width || y >= grid->height)
+    get_wrapped_grid_pos(grid, &x, &y);
   return grid->data[y * grid->width + x];
 }
 
 void set_grid_pos(Grid *grid, int x, int y, bool value) {
   if (!grid) return;
-  get_wrapped_grid_pos(grid, &x, &y);
+  if(x < 0 || y < 0 || x >= grid->width || y >= grid->height)
+    get_wrapped_grid_pos(grid, &x, &y);
   grid->data[y * grid->width + x] = value;
 }
 

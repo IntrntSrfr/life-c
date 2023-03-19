@@ -1,5 +1,3 @@
-#include <memory.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -9,7 +7,6 @@
 
 #ifdef linux
 #define OS_WINDOWS 0
-#include <unistd.h>
 #include <time.h>
 #endif
 

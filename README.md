@@ -4,7 +4,7 @@ Its Conway's Game of Life
 
 I made this to try and learn some C 👍
 
-I haven't added gif exporting yet
+![Wicked cool gif](example.gif)
 
 ## Dependencies
 

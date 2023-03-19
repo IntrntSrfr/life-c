@@ -1,6 +1,7 @@
 #include <memory.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "game.h"
 #include "grid.h"
@@ -24,6 +25,7 @@ Game *new_game(int height, int width, bool wrap) {
   game->width = width;
   game->grid = new_grid(height, width, wrap);
   game->buf_grid = new_grid(height, width, wrap);
+  game->history_len = 0;
   game->history = NULL;
   return game;
 }
@@ -31,6 +33,9 @@ Game *new_game(int height, int width, bool wrap) {
 void destroy_game(Game *game) {
   destroy_grid(game->grid);
   destroy_grid(game->buf_grid);
+  for (int i = 0; i < game->history_len; i++) {
+    free(game->history[i]);
+  }
   free(game->history);
   free(game);
 }
@@ -41,28 +46,27 @@ void randomize_game(Game *game, float p) {
 
 void create_game_history(Game *game, int iterations) {
   if (!game)return;
-  game->history = (bool **) malloc(sizeof(bool *) * iterations + 1);
-  for (int i = 0; i < iterations - 1; ++i) {
-    game->history[i] = malloc(sizeof(bool *) * game->height * game->width);
+  game->history_len = iterations;
+  game->history = malloc(iterations * sizeof(bool*));
+  for (int i = 0; i < iterations; i++) {
+    game->history[i] = malloc(game->height * game->width * sizeof(bool));
   }
 }
 
 void run_game(Game *game, int iterations, bool display, int delay) {
   if (!game) return;
-  printf("%p\n", game->history);
   free(game->history);
   const int grid_size = game->height * game->width;
-  //create_game_history(game, iterations);
+  create_game_history(game, iterations);
 
 #if !OS_WINDOWS
   struct timespec ts;
-  if (!OS_WINDOWS)
-    ts = (struct timespec) {0, delay * 1000000};
+  ts = (struct timespec) {0, delay * 1000000};
 #endif
   for (size_t i = 0; i < iterations; i++) {
     if (display)
       print_grid(game->grid);
-    //memcpy(game->history + grid_size * i, game->grid->data, grid_size);
+    memcpy(game->history[i], game->grid->data, grid_size * sizeof(bool));
     step_game(game);
     if (display) {
 #if OS_WINDOWS
@@ -87,21 +91,18 @@ static uint8_t palette[] = {
 
 void export_game(Game *game, const int height, const int width) {
   if (!game) return;
-  const int game_size = game->height * game->width;
-  int iter = 0;
-  printf("hello\n");
-  for (int i = 0; i < 5; ++i) {
-    //bool *data = *(game->history + i);
-    for (int j = 0; j < 10; ++j) {
-      //printf("ye: %d\n", *(data + j));
+  int h_s = height / game->height; 
+  int w_s = width / game->width; 
+  ge_GIF *g = ge_new_gif("./out.gif",width, height,palette,1,-1,0);
+  for (int i = 0; i < game->history_len; i++) {
+    for(int y = 0; y < height; y++){
+      for (int x = 0; x < width; x++) {
+        int n_y = y / h_s;
+        int n_x = x / w_s;
+        g->frame[y*width+x] = game->history[i][n_y*game->width+n_x];
+      }
     }
-    //printf("%p\n", *game->history+i);
+    ge_add_frame(g, 10);
   }
-
-  /*while(game->history+iter){
-    printf("hello\n");
-    iter++;
-  }
-  */
-  //ge_GIF *g = ge_new_gif("./out.gif",150, 150,palette,1,-1,0);
+  ge_close_gif(g);
 }

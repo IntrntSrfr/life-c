@@ -12,7 +12,6 @@ Grid *new_grid(int height, int width, bool wrap) {
   grid->width = width;
   grid->wrap = wrap;
   grid->data = calloc(height * width, sizeof(bool));
-  ;
   return grid;
 }
 
@@ -88,7 +87,7 @@ void print_grid(const Grid *grid) {
     for (size_t x = 0; x < grid->width; x++) {
       const char *tmp = grid->data[y * grid->width + x] ? "# " : ". ";
       int cur = (int)(y * grid->width + x) * 2;
-      strcpy_s(out_str + cur + offset, 3, tmp);
+      strcpy(out_str + cur + offset, tmp);
     }
     out_str[(1 + y) * grid->width * 2 + offset] = '\n';
     offset += 1;

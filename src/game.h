@@ -8,6 +8,7 @@ typedef struct {
   Grid *grid;
   Grid *buf_grid;
   bool **history;
+  int history_len;
   int height;
   int width;
 } Game;
